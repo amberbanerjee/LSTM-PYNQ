@@ -66,7 +66,44 @@ void DoCompute(ap_uint<16> numberColumns,
 	(numberColumns, output_stream_columns, output_stream_hidden_layer,
 	bgi_ih,bgi_hh,wgi_ih,wgi_hh,bgf_ih,bgf_hh,wgf_ih,wgf_hh,bgo_ih,bgo_hh,wgo_ih,wgo_hh,bci_ih,bci_hh,wci_ih,wci_hh, lut_sigmoid_1, lut_tanh_1);
 				
-	StreamingDataWidthConverter_Batch<OUTPUTACTIVATIONHIDDENLAYERWIDTH*PE, OUTPUTACTIVATIONHIDDENLAYERWIDTH * NUMBER_OF_NEURONS, NUMBER_OF_NEURONS/PE>(output_stream_hidden_layer, output_stream_input_streamer, numberColumnsTwice);
+	HiddenLayer_noPH
+	<PE, SIMD_INPUT, SIMD_RECURRENT, t_fixed_image, PIXELWIDTH,
+	t_fixed_bgi, BIASWIDTH, t_fixed_wgi, WEIGHTWIDTH, t_fixed_sum_wgi, t_fixed_gix_sum,
+	t_fixed_bgf, BIASWIDTH, t_fixed_wgf, WEIGHTWIDTH, t_fixed_sum_wgf, t_fixed_gfx_sum,
+	t_fixed_bgo, BIASWIDTH,t_fixed_wgo, WEIGHTWIDTH, t_fixed_sum_wgo, t_fixed_gox_sum,
+	t_fixed_bci, BIASWIDTH, t_fixed_wci, WEIGHTWIDTH, t_fixed_sum_wci, t_fixed_ci_gi_mul,	
+	t_fixed_recurrent, OUTPUTACTIVATIONHIDDENLAYERWIDTH,
+	ap_uint<HEIGHT_IN_PIX_TYPEWIDTH>, HEIGHT_IN_PIX,
+	ap_uint<NUMBER_OF_NEURONS_TYPEWIDTH>, NUMBER_OF_NEURONS,
+	MAX_NUMBER_COLUMNS_TEST_SET,
+	t_fixed_state, 
+	t_fixed_sigma_o, NUMBER_OF_LUT_ETRIES_SIGMOID_1, t_fixed_lut_sigmoid_limit, t_fixed_lut_sigmoid_recip_step,
+	t_fixed_tanh_o, NUMBER_OF_LUT_ETRIES_TANH_1, t_fixed_lut_tanh_limit, t_fixed_lut_tanh_recip_step
+	>
+	(numberColumns,output_stream_hidden_layer , output_stream_hidden_layer1,
+	bgi_ih,bgi_hh,wgi_ih,wgi_hh,bgf_ih,bgf_hh,wgf_ih,wgf_hh,bgo_ih,bgo_hh,wgo_ih,wgo_hh,bci_ih,bci_hh,wci_ih,wci_hh, lut_sigmoid_1, lut_tanh_1);
+	
+	
+	HiddenLayer_noPH
+	<PE, SIMD_INPUT, SIMD_RECURRENT, t_fixed_image, PIXELWIDTH,
+	t_fixed_bgi, BIASWIDTH, t_fixed_wgi, WEIGHTWIDTH, t_fixed_sum_wgi, t_fixed_gix_sum,
+	t_fixed_bgf, BIASWIDTH, t_fixed_wgf, WEIGHTWIDTH, t_fixed_sum_wgf, t_fixed_gfx_sum,
+	t_fixed_bgo, BIASWIDTH,t_fixed_wgo, WEIGHTWIDTH, t_fixed_sum_wgo, t_fixed_gox_sum,
+	t_fixed_bci, BIASWIDTH, t_fixed_wci, WEIGHTWIDTH, t_fixed_sum_wci, t_fixed_ci_gi_mul,	
+	t_fixed_recurrent, OUTPUTACTIVATIONHIDDENLAYERWIDTH,
+	ap_uint<HEIGHT_IN_PIX_TYPEWIDTH>, HEIGHT_IN_PIX,
+	ap_uint<NUMBER_OF_NEURONS_TYPEWIDTH>, NUMBER_OF_NEURONS,
+	MAX_NUMBER_COLUMNS_TEST_SET,
+	t_fixed_state, 
+	t_fixed_sigma_o, NUMBER_OF_LUT_ETRIES_SIGMOID_1, t_fixed_lut_sigmoid_limit, t_fixed_lut_sigmoid_recip_step,
+	t_fixed_tanh_o, NUMBER_OF_LUT_ETRIES_TANH_1, t_fixed_lut_tanh_limit, t_fixed_lut_tanh_recip_step
+	>
+	(numberColumns, output_stream_hidden_layer1, output_stream_hidden_layer2,
+	bgi_ih,bgi_hh,wgi_ih,wgi_hh,bgf_ih,bgf_hh,wgf_ih,wgf_hh,bgo_ih,bgo_hh,wgo_ih,wgo_hh,bci_ih,bci_hh,wci_ih,wci_hh, lut_sigmoid_1, lut_tanh_1);
+	
+	
+	StreamingDataWidthConverter_Batch<OUTPUTACTIVATIONHIDDENLAYERWIDTH*PE, OUTPUTACTIVATIONHIDDENLAYERWIDTH * NUMBER_OF_NEURONS, NUMBER_OF_NEURONS/PE>(output_stream_hidden_layer2, output_stream_input_streamer, numberColumnsTwice);
+	
 
 	OutputLayer
 	<
